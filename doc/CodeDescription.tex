@@ -1,0 +1,784 @@
+\documentclass[12pt,a4paper]{article} 
+\pagestyle{plain}
+\parindent=0.0cm
+
+\usepackage[authoryear]{natbib} 
+
+\textheight=25cm
+\textwidth=16.3cm
+
+\oddsidemargin=0.0cm
+\evensidemargin=0.0cm
+
+\marginparwidth=0.0cm
+\marginparsep=0.0cm
+
+\topmargin=0.0cm
+\headheight=0.0cm
+\headsep=0.0cm
+
+\footskip=1.3cm
+
+\include{commands}
+
+\begin{document} 
+ 
+\newlength{\temptextwidth} 
+
+\begin{center}
+{\Huge\bf A Code for Calculating Type II Dynamic Spectra}
+ 
+ \vspace{1cm}
+ 
+ \today
+ 
+ \vspace{1cm}
+\end{center}
+
+
+%
+\section{A Brief Description}
+ The code {\it Dynamic\_Spectra.f90} calculates the  dynamic  spectra 
+ predicted for a type II radio burst from the solar corona and
+ interplanetary medium. Input values for the coronal, solar wind, and
+ shock parameters are provided by way of the file {\it Dynamic\_Spectra.input}
+ (for details see Subsection \ref{AppB:inputs} below, and the sample 
+ input file included as Section \ref{AppB:inputfile}). The results
+ of calculations are output as text files, and  include such things as
+ a summary of the input parameters and run conditions, plasma and shock 
+ parameters as a function of time, plasma and shock parameters as well as 
+ fundamental and harmonic emission as a function of location, and 
+ dynamic spectra.
+ 
+ The data produced by {\it Dynamic\_Spectra.f90} is placed in a number of 
+ different files (for details see Subsection \ref{AppB:outputs} below). 
+ These data can then be plotted by means of two IDL scripts called  
+ {\it Dynamic\_Spectra.pro} and {\it Helio\_cont.pro}.
+ 
+ The three subsections below summarize: \ref{AppB:relatedfiles} the input
+ file and plotting scripts;  \ref{AppB:inputs} the input variables; and 
+ \ref{AppB:outputs} the output files related to {\it Dynamic\_Spectra.f90}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ 
+
+\section{Related Files:}\label{AppB:relatedfiles} 
+
+
+ \setlength{\temptextwidth}{\textwidth}  
+ \addtolength{\temptextwidth}{-1.0\parindent}
+\noindent {\tt Dynamic\_Spectra.input}
+  
+ \parbox[t]{\temptextwidth}{Is the parameter input file. The inputs
+                            include,  but are not limited to, the
+                            output directory and file  information,
+                            initial shock parameters, and the 1 AU 
+                            and coronal normalizations of plasma and
+                            magnetic field  parameters. The complete
+                            list is described in Subsection 
+                            \ref{AppB:inputs} below, and an example
+                            input file is  included as Section
+                            \ref{AppB:inputfile}.}
+
+ \vspace{0.5cm}
+ 
+ \setlength{\temptextwidth}{\textwidth}  
+ \addtolength{\temptextwidth}{-1.0\parindent}
+\noindent {\tt Dynamic\_Spectra.pro} 
+ 
+ \parbox[t]{\temptextwidth}{Is an IDL script for plotting output from 
+                            Dynamic\_Spectra.f90. It produces three
+                            figures: the first is a five   panel
+                            figure showing UCME, Radial\_Height,
+                            theta, b, and U;  the second is a four
+                            panel figure showing Ti, Te, N\_e, B1;
+                            and  the third figure shows the dynamic
+                            spectrum for a selected observer. This 
+                            script is included as Section \ref{AppB:DSpro}}
+
+ \vspace{0.5cm} 
+
+ \setlength{\temptextwidth}{\textwidth}  
+ \addtolength{\temptextwidth}{-1.0\parindent}
+\noindent {\tt Helio\_cont.pro}
+ 
+ \parbox[t]{\temptextwidth}{Is an IDL script for plotting output
+                            from  Dynamic\_Spectra.f90. It produces a
+                            10 panel figure of the plasma and 
+                            magnetic field parameters as well as the
+                            frequency integrated  fundamental and
+                            harmonic fluxes as a function of
+                            position. This  script is included as
+                            Section \ref{AppB:HCpro}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ 
+\newpage
+
+\section{Inputs:}\label{AppB:inputs}
+  {\it Dynamic\_Spectra.f90} gets its input from the file 
+  {\it Dynamic\_Spectra.input}. What follows is a list of the
+  input parameters  contained in {\it Dynamic\_Spectra.input}. The values
+  listed below as  {\it DEFAULT} are used if the file {\it
+  Dynamic\_Spectra.input} cannot be found.
+
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Output\_dir} 
+    
+    \parbox[t]{\temptextwidth}{This is the path to the directory to which
+                               data will be output.  It must already
+                               exist, \ie the program will not create it. \\
+                               $DEFAULT=$  {\tt 'data/spectra/'}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt file\_ident} 
+    
+    \parbox[t]{\temptextwidth}{A distinguishing name to be appended to
+                               the end of all of the output files for
+                               the current run. \\ 
+                               $DEFAULT=$ {\tt 'temp.dat'}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Radial\_Height} 
+    
+    \parbox[t]{\temptextwidth}{The height in solar radii at which the
+                               nose of the  global shock is positioned at
+                               the start of  calculations. \\ 
+                               ($214\approx$ 1 AU)         \\
+                               $DEFAULT=$ {\tt 1.1}}
+ 
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt UCME} 
+    
+    \parbox[t]{\temptextwidth}{The initial radial speed of of the
+                               global   shock in m s$^{-1}$. A reasonable
+                               range is a few  hundred to a couple of
+                               thousand km s$^{-1}$.
+                               \\ $DEFAULT=$ {\tt 1500.0e3}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}  
+ \noindent {\tt CME\_accel} 
+  
+    \parbox[t]{\temptextwidth}{The deceleration imposed on the global 
+                               shock speed  in m s$^{-2}$. A good guide
+                               for selecting this number  is provided by 
+                               \citet{gopalswamyetal01b}. \\
+                               $DEFAULT=$ {\tt 5.9}}
+      
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}  
+ \noindent {\tt expansion} 
+  
+    \parbox[t]{\temptextwidth}{A parameter to set the relative flow speed
+                               across the  global shock front; ranging
+                               between 0 and 1  corresponding to no
+                               expansion (ie the way ripples are 
+                               currently done) through to expansion
+                               equivalent to its  radial speed.     \\
+                               $DEFAULT=$ {\tt 0.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt scale} 
+    
+    \parbox[t]{\temptextwidth}{A parameter to set the size of the global
+                               shock at 1 AU. A value of 1 gives a shock 
+                               of ~1AU curvature at ~1AU, making this number
+                               bigger makes the shock smaller at 1AU. \\
+                               $DEFAULT=$ {\tt 1.0}}
+
+  \vspace{0.5cm}
+ 
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt scale\_exp} 
+    
+    \parbox[t]{\temptextwidth}{A parameter to define the rate of change 
+                               of shock size with radial distance (see line 
+                               882 of {\it Dynamic\_Spectra.f90}). It 
+                               should generally be smaller for smaller 
+                               1AU shocks so as to give a reasonable 
+                               size at 1 Solar Radius. \\
+                               $DEFAULT=$ {\tt 0.37}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}   
+ \noindent {\tt exp\_min} 
+    
+    \parbox[t]{\temptextwidth}{log$_{10}$ Hz of the lowest frequency in the 
+                               calculated dynamic spectra. \\ 
+                               $DEFAULT=$ {\tt 4.0}}
+
+  \vspace{0.5cm}
+
+\newpage
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt exp\_range} 
+   
+    \parbox[t]{\temptextwidth}{log$_{10}$ Hz of the range of frequencies the
+                               dynamic  spectra covers. \\
+                               $DEFAULT=$ {\tt 5.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt l\_val} 
+    
+    \parbox[t]{\temptextwidth}{A multiplicative coefficient of the dynamic 
+                               spectra frequency range. \\
+                               $DEFAULT=$ {\tt 1.0}
+
+                               Lower frequency = l\_val$\times 10^{exp\_min}$ \\ 
+                               Upper frequency = l\_val$\times 10^{(exp\_min+exp\_range)}$}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Average\_kappa} 
+    
+    \parbox[t]{\temptextwidth}{Average value of KAPPA parameter of
+                               distribution  function, 2-5 are reasonable
+                               for solar wind. \\
+                               $DEFAULT=$ {\tt 3.0}} 
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Ne\_1AU} 
+    
+  \parbox[t]{\temptextwidth}{The 1 AU value for the electron number density 
+                             (m$^{-3}$). The value at other radial distances 
+                             is determined using a density model based on the
+                             \citet{saitoetal77}, 
+                             and \citet{rc98c} models. \\ 
+                             $DEFAULT=$ {\tt 5.1e6}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Ne\_1Rs} 
+    
+    \parbox[t]{\temptextwidth}{The 1 solar radius value for the electron number 
+                               density (m$^{-3}$). The value at other radial 
+                               distances 
+                               is determined using a density model based on the
+                               \citet{saitoetal77}, 
+                               and \citet{rc98c} models. \\
+                               $DEFAULT=$ {\tt 1.68e14}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Te\_1AU} 
+  
+    \parbox[t]{\temptextwidth}{The 1 AU value for the electron temperature (K). 
+                               The value at other radial distances 
+                               is determined using a power-law electron temperature 
+                               model from \citet{rc98c}. \\  
+                               $DEFAULT=$ {\tt 2.4e5}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Ti\_1AU} 
+  
+    \parbox[t]{\temptextwidth}{The 1 AU value for the ion temperature (K). The 
+                               value at other radial distances is determined 
+                               using the functional form used for $T_e$, but 
+                               with an exponent which produces a typical coronal 
+                               value for a nominal 1 AU value. \\ 
+                               $DEFAULT=$ {\tt 1.7e5}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Bo} 
+    \parbox[t]{\temptextwidth}{The magnetic field strength (T) at 1 solar radius. 
+                               The  value at other radial
+                               distances is determined  using the Parker
+                               model for equatorial magnetic field
+                               strength, the default value provides typical 
+                               value at 1 AU) \\ 
+                               $DEFAULT=$ {\tt 1.89743128e-4}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Vsw\_1AU} 
+  
+    \parbox[t]{\temptextwidth}{The solar wind speed at 1 AU (m s${-1}$). The value at
+                               other radial distances  is determined
+                               using a solar wind flow speed model from  
+                               \citet{rc98c}.\\ 
+                               $DEFAULT=$ {\tt 4.0e5}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Xo1} 
+  
+    \parbox[t]{\temptextwidth}{The X coordinate (heliocentric) of observer 1 (m). \\ 
+                               $DEFAULT=$ {\tt 1.49599e11}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Yo1} 
+    
+    \parbox[t]{\temptextwidth}{The Y coordinate (heliocentric) of observer 1 (m). \\ 
+                               $DEFAULT=$ {\tt 1.00e9}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Xo2} 
+    
+    \parbox[t]{\temptextwidth}{The X coordinate (heliocentric) of observer 2 (m). \\ 
+                               $DEFAULT=$ {\tt 1.00e11}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Yo2} 
+    
+    \parbox[t]{\temptextwidth}{The Y coordinate (heliocentric) of observer 2 (m). \\ 
+                               $DEFAULT=$ {\tt 1.00e11}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Xo3} 
+    
+    \parbox[t]{\temptextwidth}{The X coordinate (heliocentric) of observer 3 (m). \\ 
+                               $DEFAULT=$ {\tt 1.00e11}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Yo3} 
+    
+    \parbox[t]{\temptextwidth}{The Y coordinate (heliocentric) of observer 3 (m). \\ 
+                               $DEFAULT=$ {\tt -1.00e11}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt time\_resolution} 
+    
+    \parbox[t]{\temptextwidth}{The time resolution of dynamic spectra in seconds. \\ 
+                               $DEFAULT=$ {\tt 10}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Maxtheta} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in radians for the array
+                               of theta  values used in the calculation 
+                               of ripples as a function of time -- 
+                               output by the  code. \\ 
+                               $DEFAULT=$ {\tt 6.283185307}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Mintheta} 
+   
+    \parbox[t]{\temptextwidth}{The lower range in radians for the array
+                               of theta  values used in the calculation 
+                               of ripples as a function of time -- 
+                               output by the  code. \\ 
+                               $DEFAULT=$ {\tt 3.141592654}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MaxU} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in m s$^{-1}$ for the array 
+                               of flow speed values used in the calculation 
+                               of ripples as a function of time -- 
+                               output by the  code. \\ 
+                               $DEFAULT=$ {\tt 100.0e4}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MinU} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in m s$^{-1}$ for the array 
+                               of flow speed values used in the calculation 
+                               of ripples as a function of time -- 
+                               output by the  code. \\ 
+                               $DEFAULT=$ {\tt 0.0e1}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Maxb} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in log$_{10}$[m$^{-1}$] for 
+                               the array of ripple curvature values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt -7.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt Minb} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in log$_{10}$[m$^{-1}$] for 
+                               the array of ripple curvature values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt -10.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MaxB1} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in log$_{10}$[T] for the 
+                               array of magnetic field strength values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt -3.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MinB1} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in log$_{10}$[T] for the  
+                               array of magnetic field strength values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt -9.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth} 
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MaxNe} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in log$_{10}$[m$^{-3}$] for the 
+                               array of electron number density values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 15.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth} 
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MinNe} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in log$_{10}$[m$^{-3}$] for the 
+                               array of electron number density values used in 
+                               the calculation of ripples as a function of 
+                               time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 6.0}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth} 
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MaxTe} 
+   
+    \parbox[t]{\temptextwidth}{The upper range in K for the array of electron 
+                               temperature used in the calculation of ripples 
+                               as a function of time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 2.0e6}} 
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MinTe} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in K for the array of electron 
+                               temperature used in the calculation of ripples 
+                               as a function of time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 4.0e4}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth} 
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MaxTi} 
+    
+    \parbox[t]{\temptextwidth}{The upper range in K for the array of ion 
+                               temperature used in the calculation of ripples 
+                               as a function of time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 3.0e6}} 
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth} 
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt MinTi} 
+    
+    \parbox[t]{\temptextwidth}{The lower range in K for the array of ion 
+                               temperature used in the calculation of ripples 
+                               as a function of time -- output by the  code. \\ 
+                               $DEFAULT=$ {\tt 4.0e4}}
+
+  \vspace{0.5cm}
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent} 
+ \noindent {\tt nos} 
+    
+    \parbox[t]{\temptextwidth}{The number of plasma structures imposed on 
+                               the model corona and solar wind. Primary use 
+                               is so that the code knows how many to try and 
+                               read in. \\ 
+                               $DEFAULT=$ {\tt 0}}
+
+ \vspace{0.5cm}       
+
+\noindent For examples of structure parameters see Dynamic\_Spectra.input and the
+Structures subroutine in Dynamic\_Spectra.f90.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\newpage
+
+\section{Outputs:}\label{AppB:outputs}   
+The code replaces the $\ast$ in what follows by file\_ident, see page \pageref{AppB:inputs}. 
+
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Source\_Loc\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Five numbers output for every ripple calculated, consisting  of:
+       
+                               'X' position defined relative to the time step global shock  coordinates. 
+
+                               'Y' corresponding to X 
+
+                               'F' Fundamental flux at observer generated  by that source. 
+                               
+                               'H' Harmonic flux at observer generated by that source.
+
+                               '$f_p$' The average plasma frequency of the source.}
+
+  
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Source\_Num\_$\ast$} 
+   
+   \parbox[t]{\temptextwidth}{The number of sources/ripples calculated per time step 
+                               in order to pack the global shock. Used to work out the 
+                               the number of sources in a given number of time steps.}
+
+    \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt CME\_b\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{The curvature parameter for the global shock at successive time steps.}  
+
+    \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt DS{[1-3][F$|$H]}\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{An array of the flux in log$_{10}$ W m$^{-2}$ Hz$^{-1}$ sr$^{-1}$ as 
+                               a function of frequency and time. [1-3] and [F$|$H] refer to the six 
+                               different dynamic spectra for the 3 different observers as separate 
+                               fundamental and harmonic components, \eg DS1F\_$\ast$ is the fundamental 
+                               component of the dynamic spectrum seen by observer 1.}
+  
+  \vspace{0.5cm}
+   
+   \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt LOG\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{General information about a run:
+    Includes start time, array sizes, resolution, input parameter 
+    plot ranges, and finish time and reason for finish.}  
+
+   \vspace{0.5cm}
+   
+   \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt parameters\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Consists of: input parameters followed by the time of time steps in 
+                               seconds and the corresponding solar wind speed of the 
+                               last ripple calculation. Can be useful in determining the time in 
+                               seconds corresponding to a number of time steps.}
+
+    \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt scaling\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Values used for conversion/stretching of values output on a 
+                               time step basis into an actual time spread...}
+  
+   \vspace{0.5cm}
+   
+   \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Radial\_Height\_$\ast$} 
+   
+    \parbox[t]{\temptextwidth}{The height above the Sun of the leading edge of the global shock 
+                               at successive time steps.}
+  
+   \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt UCME\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{The radial speed m s$^{-1}$ of the global shock at successive time steps.}
+ 
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt theta\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the angle 
+                               between the negative of the bulk plasma flow and the upstream magnetic 
+                               field. (bin ranges are given in LOG\_$\ast$)}
+  
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt U\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the flow 
+                               speed.}
+  
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt b\_$\ast$} 
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the 
+                               ripple curvature, and thus size.}
+  
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}   
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt B1\_$\ast$}
+    
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the 
+                               upstream magnetic field strength.}
+
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Ne\_$\ast$} 
+   
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the 
+                               electron number density.}
+  
+  \vspace{0.5cm}
+ 
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Te\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the 
+                               electron temperature.}
+ 
+  \vspace{0.5cm}
+   
+  \setlength{\temptextwidth}{\textwidth}  
+  \addtolength{\temptextwidth}{-1.0\parindent}
+ \noindent {\tt Ti\_$\ast$} 
+    
+    \parbox[t]{\temptextwidth}{Ripples at subsequent time steps binned as a function of the ion 
+                               temperature.}
+
+
+
+%%%
+\begin{thebibliography}{}
+
+\bibitem[{\it Gopalswamy et al.}(2001b)]{gopalswamyetal01b}
+ Gopalswamy, N., A. Lara, S. Yashiro, M.L. Kaiser, 
+and R.A. Howard, 
+Predicting the 1-AU arrival times of coronal mass ejections, 
+{\it Journal of Geophysical Research} {\it 106}, 29207, 2001.
+
+
+\bibitem[{\it Robinson and Cairns}(1998c)]{rc98c}
+ Robinson, P.A., and I.H. Cairns, 
+Fundamental and Harmonic Emission in Type III Solar Radio Bursts 
+III. Heliocentric Variations of Interplanetary Beam and Source 
+Parameters, 
+{\it Solar Physics}, {\it 181}, 429, 1998c.
+
+
+\bibitem[{\it Saito et al.}(1977)]{saitoetal77}
+Saito, Kuniji, Arthur I. Poland, and Richard H. Munro, 
+A Study of the Background Corona Near Solar Minimum, 
+{\it Solar Physics}, {\it 57}, 121, 1977.
+%%%
+\end{thebibliography}
+%%%
+
+\end{document}

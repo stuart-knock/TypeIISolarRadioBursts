@@ -1,0 +1,43 @@
+#############################
+### TypeII/FORTRAN/README ###
+#############################
+   This code calculates the predicted dynamic spectra for a type II  
+   radio burst from the solar corona and interplanetary medium. The 
+   program is written in Fortran 90, formatted output is written to 
+   file with plotting of that output performed by two IDL routines. 
+   
+   Run time can be long, the example is relatively short with a run 
+   time of about 30 minutes, with full runs (corona to 1AU) typically 
+   taking a couple of days on a current desktop machine 
+   (~2GHz Pentium/AMD). 
+   
+   The data output can also be large. Even the short example produces 
+   ~42M of .dat files.   
+_____________________________________________________________________
+
+ #Quick Start Guide: 
+ 
+   compile Dynamic_Spectra.f90 
+ 
+     AMD[zeus, sgt, lenin, castor]: lf95 --tpp --prefetch 2 -o Dynamic_Spectra.e Dynamic_Spectra.f90
+
+     P4[loki, iolaus, arjuna, ganesh, perseus, odysseus]: lf95 --tp4 -o Dynamic_Spectra.e Dynamic_Spectra.f90
+
+     XEON[shakti]:lf95 --tp4 -o Dynamic_Spectra.e Dynamic_Spectra.f90
+
+     [myrmidon]:f90 -fast [-xarch=v9b (64bit including highest level optimisation for myrmidon chips and operating system)] -o Dynamic_Spectra.e Dynamic_Spectra.f90
+
+   Run the code using the example input file by typing 
+     
+     Dynamic_Spectra.e
+
+   at a command line. The program uses input from Dynamic_Spectra.input 
+   if it can find it otherwise it uses default values hard coded into 
+   the subroutine Initialise_Global. The example Dynamic_Spectra.input 
+   file takes about 30 minutes on a ~2GHz P4/Athlon and produces about
+   42MB of .dat files. 
+   
+   Once the code has finished running, change into the IDL/ directory 
+   and run the IDL routines to plot the output.
+_____________________________________________________________________
+

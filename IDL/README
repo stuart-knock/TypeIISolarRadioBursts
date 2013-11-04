@@ -1,0 +1,46 @@
+#########################
+### TypeII/IDL/README ###
+#########################
+
+   The IDL routines in this directory plot the data output by 
+   Dynamic_Spectra.f90 
+_____________________________________________________________________
+
+ #Quick Start Guide: 
+   After running the executable produced by compiling 
+   Dynamic_Spectra.f90, start IDL and at the prompt type
+   
+    .rn Helio_cont
+   
+    .rn Dynamic_Spectra
+   
+   selecting x will send the plot to the screen. 
+
+   These two plotting routines use generic IDL procedures
+
+    selectdevice.pro 
+    closedevice.pro 
+    colorbar.pro
+   
+   So these must be accessible to IDL, that is somewhere in your IDL
+   !PATH
+   
+_____________________________________________________________________
+
+ #Contents of this Directory:
+
+  25K Aug 13 15:33 Dynamic_Spectra.pro 
+     This IDL script plots ripple parameters as a function of time 
+     and dynamic spectra from the data output from Dynamic_Spectra.f90
+ --------------------------------------------------------------------
+
+  46K Aug 13 16:00 Helio_cont.pro
+     This IDL script plots ripple parameters as a function  of
+     location from the data output from Dynamic_Spectra.f90
+ --------------------------------------------------------------------
+
+  512 Aug 13 14:55 colours/
+     This directory contains saved colour maps used in plotting the 
+     dynamic spectra and the solar wind and shock parameters as a 
+     function of location.
+ --------------------------------------------------------------------
