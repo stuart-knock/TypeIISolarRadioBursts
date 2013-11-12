@@ -11,3 +11,5 @@
 *.aux
 *.log
 
+## Maybe some python plotting
+temp.py
