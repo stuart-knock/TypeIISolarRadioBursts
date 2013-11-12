@@ -1,0 +1,13 @@
+# .gitignore for TypeIISolarRadioBursts
+
+## Compilation cruft 
+*.mod
+*.e
+
+## Data
+*.dat
+
+## Latex
+*.aux
+*.log
+
