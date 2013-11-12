@@ -1,61 +1,61 @@
 !Dynamic_Spectra.f90  (Thesis Version)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!  Fortran 90    First Written: 18/12/2001 (Reorganization/extension of 
-!!                                           a code begun in 1999)   
+!!  Fortran 90    First Written: 18/12/2001 (Reorganization/extension of
+!!                                           a code begun in 1999)
 !!                Current Version: see MODIFICATION HISTORY below
 !!  
-!!  Written by: Stuart Knock 
+!!  Written by: Stuart Knock
 !!
-!!  PURPOSE: Calculates the predicted dynamic spectra for a type II  
+!!  PURPOSE: Calculates the predicted dynamic spectra for a type II
 !!           radio burst from the solar corona and interplanetary 
 !!           medium.
 !!
-!!  MAIN PROGRAM: Dynamic_Spectra --> Loops over the ripples which make 
+!!  MAIN PROGRAM: Dynamic_Spectra --> Loops over the ripples which make
 !!                                    up a global shock front for 
 !!                                    successive time steps, calling 
-!!                                    relevant subroutines while deciding 
-!!                                    whether to continue and writing 
+!!                                    relevant subroutines while deciding
+!!                                    whether to continue and writing
 !!                                    some information to file...
-!!                                    
 !!
-!!  MODULES: Global --> kind definitions and physical parameters used 
+!!
+!!  MODULES: Global --> kind definitions and physical parameters used
 !!                      throughout the code.
 !!
-!!           Shock --> parameter definitions and declarations related to 
+!!           Shock --> parameter definitions and declarations related to
 !!                     the shock. eg curvature, strength, speed etc.
 !!
 !!           Wind --> parameter definitions and declarations related to
 !!                    the solar wind. eg speed, temperature, density etc.
 !!
-!!           Beam --> parameter definitions and declarations related to 
+!!           Beam --> parameter definitions and declarations related to
 !!                    the electron beams. eg number density, width etc.
 !!                    CONTAINS gamma function FUNCTION
 !!
-!!           Emis --> parameter definitions and declarations related to 
-!!                    the calculation of volume emissivities. eg solid 
+!!           Emis --> parameter definitions and declarations related to
+!!                    the calculation of volume emissivities. eg solid
 !!                    angle over which emission is spread.
 !!                    CONTAINS error function FUNCTION
 !!
-!!           OutPut --> file name and other variables associated with the 
+!!           OutPut --> file name and other variables associated with the
 !!                      programs output.  
 !!
-!!           Spectra --> Arrays & associated variables of the calculated 
-!!                       volume emissivities. 
+!!           Spectra --> Arrays & associated variables of the calculated
+!!                       volume emissivities.
 !!
-!!           NR --> contains Numerical Recipes routines including: 
+!!           NR --> contains Numerical Recipes routines including:
 !!                  - Gaussian_Random(harvest)
 !!
-!!           
+!!
 !!  SUBROUTINES: Initialise_Global --> Reads in initial parameters and 
 !!                                     ranges from Dynamic_Spectra.input
-!!                                     and writes some information about 
+!!                                     and writes some information about
 !!                                     initial values to a LOG_*.dat file.
 !!                                     CALLED FROM MAIN.
 !!               
 !!               Initialise_Time_Step --> sets up things that need to be 
 !!                                        set at the beginning of each
 !!                                        time step. CALLED FROM MAIN.
-!!                                        
+!!               
 !!               
 !!               Ripple_Parameters --> Determines the shock and upstream 
 !!                                     conditions for the ripples that 
@@ -116,14 +116,14 @@
 !!                                      stored arrays. CALLED FROM MAIN.
 !!               
 !!               Write_to_file --> CALLED FROM FINALISE_AND_WRITE. 
-!!               
-!!               
+!!  
+!!  
 !!  USAGE: see README file in this directory
-!!               
+!!  
 !!  INPUTS: see Dynamic_Spectra.input & README file in this directory
 !!
-!!  OUTPUTS: see README file in this directory                      
-!!                  
+!!  OUTPUTS: see README file in this directory
+!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! MODIFICATION HISTORY (Most recent modification first)
 !! date is when modification is basically functioning, 
@@ -161,7 +161,7 @@
                              AU=1.49599e11_L, Sol_rad=6.965e8_L,   & 
                              Sol_period=2194560.0_L 
 !
-  REAL(KIND=L), PARAMETER :: me2on=2.0_L/me   
+  REAL(KIND=L), PARAMETER :: me2on=2.0_L/me
 !  
 ! Other constants used frequently:  
 !  
@@ -293,7 +293,7 @@
 !  
   REAL(KIND=L), DIMENSION(VR) :: vparray=0.0_L ! vel|| dist'bn
   REAL(KIND=L), DIMENSION(VR) :: vcarray=0.0_L ! cutoff vel dist'bn
-  REAL(KIND=L), DIMENSION(VR) :: f=0.0_L         ! total vel dist'bn
+  REAL(KIND=L), DIMENSION(VR) :: f=0.0_L       ! total vel dist'bn
   REAL(KIND=L), DIMENSION(VR) :: vel=0.0_L     ! beam velocity
   REAL(KIND=L), DIMENSION(VR) :: temp4vponvd=0.0_L
 !  
@@ -403,12 +403,12 @@
    LOGICAL, SAVE :: gaus_stored=.FALSE. 
 !
    n=SIZE(harvest)
-   IF(.NOT. gaus_stored)ALLOCATE(g(n))   
+   IF(.NOT. gaus_stored)ALLOCATE(g(n))
 !  
-   IF(gaus_stored)THEN     
-     harvest=g            
-     gaus_stored=.FALSE.  
-   ELSE                   
+   IF(gaus_stored)THEN
+     harvest=g
+     gaus_stored=.FALSE.
+   ELSE
      DO i=1,n
        DO 
          CALL RANDOM_NUMBER(v1(i))
@@ -458,12 +458,12 @@
   INTEGER :: first_pass !used to signify 1st time writing to file
   CHARACTER(LEN=43) :: Output_dir
   CHARACTER(LEN=17) :: file_ident !common ending for various output files
-!                           
-  END MODULE OutPut              
+!
+  END MODULE OutPut
 !____________________________________________________________________
    
-  MODULE Spectra                                          
-! **************                                                
+  MODULE Spectra
+! **************
   USE Global, ONLY: L
   IMPLICIT NONE
   SAVE
@@ -484,8 +484,8 @@
   END MODULE Spectra
 !____________________________________________________________________
    
-  MODULE NR                                          
-! *********                                                
+  MODULE NR
+! *********
   USE Global, ONLY: L
   IMPLICIT NONE
   SAVE  
@@ -502,11 +502,11 @@
    LOGICAL, SAVE :: gaus_stored=.FALSE. 
 !
    n=SIZE(harvest)
-   IF(.NOT. gaus_stored)ALLOCATE(g(n))   
+   IF(.NOT. gaus_stored)ALLOCATE(g(n))
 !  
-   IF(gaus_stored)THEN    
-     harvest=g            
-     gaus_stored=.FALSE.  
+   IF(gaus_stored)THEN
+     harvest=g
+     gaus_stored=.FALSE.
    ELSE 
      DO i=1,n
        DO 
@@ -566,7 +566,7 @@
   ENDFILE(unit=29) 
   CLOSE(unit=29)
 !
-  DO !time_step            
+  DO !time_step
     CALL Initialise_Time_Step
     ripples=0
     OPEN(unit=29, file=TRIM(Output_dir)//'CME_b_'//file_ident, & 
@@ -624,13 +624,13 @@
     CLOSE(unit=27)
   END DO !time_step
 !
-  ENDFILE(unit=23) 
+  ENDFILE(unit=23)
   CLOSE(unit=23)
-  ENDFILE(unit=24) 
+  ENDFILE(unit=24)
   CLOSE(unit=24)
-  ENDFILE(unit=25) 
+  ENDFILE(unit=25)
   CLOSE(unit=25)
-  ENDFILE(unit=37) 
+  ENDFILE(unit=37)
   CLOSE(unit=37)
 !
   END PROGRAM Dynamic_Spectra
@@ -644,7 +644,7 @@
 !____________________________________________________________________
 
   SUBROUTINE Initialise_Global
-! ****************************    
+! ****************************
   USE Global, ONLY: L, Sol_rad
   USE OutPut, ONLY: first_pass, file_ident, Output_dir, PR,            & 
                     Maxtheta, Mintheta, MaxU, MinU, Maxb, Minb, MaxB1, & 
@@ -671,33 +671,33 @@
 313 FORMAT('***********************************',/,                     &
            '*** RESOLUTIONS/ARRAY SIZES ETC ***',/,                     &
            '***********************************',//,                    &
-           '(DS)=Dynamic Spectra  ;  (GS)=Global Shock  ;  (R)=Ripple', & 
-           //, 'Number of Frequency Bins (DS)=',I4,//,                  & 
-           'Number of Time Bins (DS) in time window=',I4,//,            & 
-           'Time Window (DS) kept in memory=',I5,' s', //,              & 
-           'Calculation time resolution=',I5,' s', //,                  & 
-           'Average Number of Ripples Packing Either Side of the Nose (GS)=',F5.1,//, & 
-           'Shock Array Size (R)=',I6,//,                               & 
-           'Calculation Region (R) Array Size x=',I4,//,                & 
-           'Calculation Region (R) Array Size R=',I4,//,                & 
-           'Electron Distribution Function Array Size V=',I6,//,        & 
+           '(DS)=Dynamic Spectra  ;  (GS)=Global Shock  ;  (R)=Ripple', &
+           //, 'Number of Frequency Bins (DS)=',I4,//,                  &
+           'Number of Time Bins (DS) in time window=',I4,//,            &
+           'Time Window (DS) kept in memory=',I5,' s', //,              &
+           'Calculation time resolution=',I5,' s', //,                  &
+           'Average Number of Ripples Packing Either Side of the Nose (GS)=',F5.1,//, &
+           'Shock Array Size (R)=',I6,//,                               &
+           'Calculation Region (R) Array Size x=',I4,//,                &
+           'Calculation Region (R) Array Size R=',I4,//,                &
+           'Electron Distribution Function Array Size V=',I6,//,        &
            'Heliocentric Parameter Array Size P=',I4,///)   
 370 FORMAT('*********************************',/,  &
            '*** PARAMETER RANGES of PLOTS ***',/,  &
            '*********************************',//, &
-           'Maxtheta=', F13.8,/,                   &  
-           'Mintheta=', F13.8,//,                  & 
-           'MaxU=', ES10.1,/,                      & 
-           'MinU=', ES10.1,//,                     & 
-           'Maxb=', F6.1,/,                        & 
-           'Minb=', F7.1,//,                       & 
-           'MaxB1=', F6.1,/,                       & 
-           'MinB1=', F6.1,//,                      & 
-           'MaxNe=', F6.1,/,                       & 
-           'MinNe=', F5.1,//,                      & 
-           'MaxTe=', ES7.1,/,                      & 
-           'MinTe=', ES7.1,//,                     & 
-           'MaxTi=', ES7.1,/,                      &  
+           'Maxtheta=', F13.8,/,                   &
+           'Mintheta=', F13.8,//,                  &
+           'MaxU=', ES10.1,/,                      &
+           'MinU=', ES10.1,//,                     &
+           'Maxb=', F6.1,/,                        &
+           'Minb=', F7.1,//,                       &
+           'MaxB1=', F6.1,/,                       &
+           'MinB1=', F6.1,//,                      &
+           'MaxNe=', F6.1,/,                       &
+           'MinNe=', F5.1,//,                      &
+           'MaxTe=', ES7.1,/,                      &
+           'MinTe=', ES7.1,//,                     &
+           'MaxTi=', ES7.1,/,                      &
            'MinTi=', ES7.1,///)
 !
   CALL DATE_AND_TIME(DATE,TIME)
@@ -759,7 +759,7 @@
       READ(20,'(6x,E7.1)')MaxTe
       READ(20,'(6x,E7.1)')MinTe
       READ(20,'(6x,E7.1)')MaxTi
-      READ(20,'(6x,E7.1)')MinTi    
+      READ(20,'(6x,E7.1)')MinTi
       READ(20,'(4x,I1)')nos
       ALLOCATE(SWS(nos), STAT=alloc_error)
       IF(alloc_error /= 0)THEN 
@@ -852,7 +852,7 @@
                            MaxB1, MinB1, MaxNe, MinNe, MaxTe, MinTe,   & 
                            MaxTi, MinTi
   ENDFILE(unit=21)
-  CLOSE(unit=21)           
+  CLOSE(unit=21)
 !
   END SUBROUTINE Initialise_Global
 !____________________________________________________________________
@@ -939,8 +939,8 @@
   USE Beam, ONLY: b4on, bsqsthetasq, bstheta1on, Uctp
   USE NR, ONLY: Gaussian_Random
   IMPLICIT NONE 
-  INTEGER, INTENT(IN) :: WHICH_SIDE            
-  REAL(KIND=L),PARAMETER:: Uc=1.8_L            
+  INTEGER, INTENT(IN) :: WHICH_SIDE
+  REAL(KIND=L),PARAMETER:: Uc=1.8_L
   REAL(KIND=L) :: gamma, migmesq, Vecu
   REAL(KIND=L), DIMENSION(10) :: BOB=0.0_L 
   INTEGER :: i
@@ -961,7 +961,7 @@
 !Calculate Vsw again for each ripple (specific radial height)
   Average_Vsw=Vsw_1AU*(RHonAU)**0.19  ! R&C 1998 III
 !
-   Average_fp=8.976_L*SQRT(Average_Ne)    
+   Average_fp=8.976_L*SQRT(Average_Ne)
 !  
 ! Theta and B1 calculations based on Parker Spiral:
 !
@@ -993,9 +993,9 @@
     BOB=1.0_L
   END WHERE
 !
-  BOB(1)=1.0_L+BOB(1)*0.5_L      
-  BOB(2:4)=1.0_L+BOB(2:4)*0.1_L  
-  BOB(5:6)=1.0_L+BOB(5:6)*0.2_L  
+  BOB(1)=1.0_L+BOB(1)*0.5_L
+  BOB(2:4)=1.0_L+BOB(2:4)*0.1_L
+  BOB(5:6)=1.0_L+BOB(5:6)*0.2_L
   BOB(7:10)=1.0_L+BOB(7:10)*0.3_L
 !  
   theta=2.0*pi-BOB(1)*Average_theta 
@@ -1222,8 +1222,8 @@
         END IF    
       CASE (4)   !square/rectangular region bound by aaa, bbb, ccc, ddd
         IF((RHSX > SWS(j)%param(1)) .AND. (RHSX < SWS(j)%param(2)) &
-           .AND. (SY_temp < SWS(j)%param(3)) .AND.                 &    
-           (SY_temp > SWS(j)%param(4)))THEN  
+           .AND. (SY_temp < SWS(j)%param(3)) .AND.                 &
+           (SY_temp > SWS(j)%param(4)))THEN
           theta=theta*SWS(j)%theta
           Ne=Ne*SWS(j)%Ne
           B1=B1*SWS(j)%B1
@@ -1231,7 +1231,7 @@
           Te=Te*SWS(j)%Te
           Vsw=Vsw*SWS(j)%Vsw
           b=b*SWS(j)%b
-          Kappa=Kappa*SWS(j)%Kappa   
+          Kappa=Kappa*SWS(j)%Kappa
         END IF
       CASE (3) !circular region of radius aaa, & center (X,Y)=(bbb,ccc)
         IF(((RHSX-SWS(j)%param(2))**2+(SY_temp-SWS(j)%param(3))**2) & 
@@ -1243,16 +1243,16 @@
           Te=Te*SWS(j)%Te
           Vsw=Vsw*SWS(j)%Vsw
           b=b*SWS(j)%b
-          Kappa=Kappa*SWS(j)%Kappa   
+          Kappa=Kappa*SWS(j)%Kappa
         END IF
       CASE (6) !coronal loop
-        IF((((RHSX-SWS(j)%param(2))**2+(SY_temp-SWS(j)%param(3))**2) & 
-           > (SWS(j)%param(1)*SWS(j)%param(1)))  .AND.               & 
-           (((RHSX-SWS(j)%param(5))**2+(SY_temp-SWS(j)%param(6))**2) & 
+        IF((((RHSX-SWS(j)%param(2))**2+(SY_temp-SWS(j)%param(3))**2) &
+           > (SWS(j)%param(1)*SWS(j)%param(1)))  .AND.               &
+           (((RHSX-SWS(j)%param(5))**2+(SY_temp-SWS(j)%param(6))**2) &
            < (SWS(j)%param(4)*SWS(j)%param(4))))THEN  
-          IF(Ripple_Height > 0.75*SWS(j)%param(1)+Sol_rad)THEN 
+          IF(Ripple_Height > 0.75*SWS(j)%param(1)+Sol_rad)THEN
             theta=theta+0.25*pi   !*SWS(j)%theta !4.95 
-          ELSE IF(Ripple_Height > 0.5*SWS(j)%param(1)+Sol_rad)THEN  
+          ELSE IF(Ripple_Height > 0.5*SWS(j)%param(1)+Sol_rad)THEN
             theta=theta+0.125*pi 
           END IF 
           Ne=Ne*SWS(j)%Ne    !5.0e15
@@ -1261,7 +1261,7 @@
           Te=Te*SWS(j)%Te    !7.5e4
           Vsw=SWS(j)%Vsw     !0.0
           b=b*SWS(j)%b       !b
-          Kappa=Kappa*SWS(j)%Kappa  
+          Kappa=Kappa*SWS(j)%Kappa
         END IF
     END SELECT
   END DO
@@ -1270,7 +1270,7 @@
 !____________________________________________________________________
 
   SUBROUTINE bckgrnd_distribution 
-! *******************************    
+! *******************************
   USE Global, ONLY: L, csq, rtpi
   USE Beam, ONLY: gammafn, ConstDist, vel, vparray, temp4vponvd
   USE Wind, ONLY: Kappa, Ve, Vd, Vesq
@@ -1359,7 +1359,7 @@
 !____________________________________________________________________
 
   SUBROUTINE B2B1_ephi
-! *********************                                               
+! *********************
   USE Global, ONLY: L, kbolt, me2on
   USE Shock, ONLY: Ma, n2n1, B2B1, B2B1_1, thetabn, ephi, ephi2onme, & 
                    S_limit
@@ -1423,7 +1423,7 @@
 !   START DATE 5 May 1995 (Iver Cairns)
 !   MODIFIED 11 Sept 2000 (Zdenka Kuncic) to incorporate
 !                         into Fortran 90 code Foreshock
-!                                               
+!
   USE Global, ONLY:  L, pi
   USE Shock, ONLY: S_limit, Ma, Mssq, thetabn, n2n1
   IMPLICIT NONE  
@@ -1441,19 +1441,19 @@
   INTEGER :: S 
   LOGICAL(LGT) :: POLISH
 !
-    POLISH = .TRUE.      
+    POLISH = .TRUE.
 !
     gamma = 5.0_L/3.0_L
     GP1 = gamma + 1._L ; GP2 = gamma + 2._L
     GM1 = gamma - 1._L ; GM2 = gamma - 2._L
-!       
+!
   DO S=1,S_limit
 !
     IF((Ma(S) > 1.2) .AND. (Mssq(S) > 1.44))THEN
 !
       COST = COS(pi-thetabn(S)) ; COS2 = COST*COST ; COS4 = COS2*COS2
       Ma2=Ma(S)*Ma(S) ; Ma4=Ma2*Ma2 ; Ma6=Ma4*Ma2
-  !    
+  !
   ! X EQUATION: AX^3 + BX^2 + CX + D:
   !
       GBETA = 2.0_L * Ma2 / Mssq(S)
@@ -1470,12 +1470,12 @@
       C_COEFF(3) = CMPLX(BB,0._sp)
       C_COEFF(4) = CMPLX(A,0._sp)
       C_ROOTS = (0.0_sp,0.0_sp)
-  !               
+  !
   ! now find the roots:
   !
       CALL ZROOTS(C_COEFF,M,C_ROOTS,POLISH)
   !
-      REAL_ROOTS(3)=REAL(C_ROOTS(3))  
+      REAL_ROOTS(3)=REAL(C_ROOTS(3))
   !   
       n2n1(S) = 1.0_L/REAL_ROOTS(3)
   !
@@ -1485,7 +1485,7 @@
 !
     IF(n2n1(S) < 1.0)n2n1(S) = 1.0_L
 !
-  END DO     
+  END DO
 !
   END SUBROUTINE cgroots 
 !____________________________________________________________________
@@ -1493,7 +1493,7 @@
  SUBROUTINE zroots(a,M,roots,polish)
 !**********************************   
  IMPLICIT NONE 
- INTEGER, PARAMETER :: I4B = SELECTED_INT_KIND(9) 
+ INTEGER, PARAMETER :: I4B = SELECTED_INT_KIND(9)
  INTEGER, PARAMETER :: SP = KIND(1.0) 
  INTEGER, PARAMETER :: SPC = KIND((1.0,1.0))
  INTEGER, PARAMETER :: LGT = KIND(.true.)
@@ -1503,10 +1503,10 @@
  COMPLEX(SPC), DIMENSION(M), INTENT(OUT) :: roots 
  LOGICAL(LGT), INTENT(IN) :: polish 
  REAL(SP), PARAMETER :: EPS=1.0e-6_sp 
- !Given the array of M +1 complex coefficients a of the polynomial   
- !M+1 i=1 a i )x i  1 ,this routine successively calls laguer and  
- !finds all M complex roots The logical variable polish should be 
- !input as .true. if polishing (also by Laguerre's method) is 
+ !Given the array of M +1 complex coefficients a of the polynomial
+ !M+1 i=1 a i )x i  1 ,this routine successively calls laguer and
+ !finds all M complex roots The logical variable polish should be
+ !input as .true. if polishing (also by Laguerre's method) is
  !desired, .false. if the roots will be subsequently polished by 
  !other means. Parameter: EPS is a small number. 
  INTEGER(I4B) :: j,its, I 
@@ -1610,33 +1610,33 @@
  (/ 0.5_sp,0.25_sp,0.75_sp,0.13_sp,0.38_sp,0.62_sp,0.88_sp,1.0_sp /)
  INTEGER, SAVE :: argh
   DO iter=1,MAXIT   !Loop over iterations up to allowed maximum.
-    its=iter 
-    abx=ABS(x) 
+    its=iter
+    abx=ABS(x)
     b(m+1:1:-1)=poly_term_cc(a(m+1:1:-1),x) !compute  polynomial
     d(m:1:-1)=poly_term_cc(b(m+1:2:-1),x)   !and first two derivatives.
-    f=poly_cc(x,d(2:m))                !f stores P /2 .
-    err=EPS*poly_rr(abx,abs(b(1:m+1)))   !Estimate of roundoff.  
+    f=poly_cc(x,d(2:m))                     !f stores P /2 .
+    err=EPS*poly_rr(abx,abs(b(1:m+1)))      !Estimate of roundoff.
     IF (ABS(b(1)) <= err) RETURN   !We are on the root.
     g=d(1)/b(1)               !The generic case:Use Laguerre's formula.
-    g2=g*g 
-    h=g2-2.0_sp*f/b(1) 
-    sq=SQRT((m-1)*(m*h-g2)) 
-    gp=g+sq 
-    gm=g-sq 
-    abp=ABS(gp) 
-    abm=ABS(gm) 
-    IF (abp < abm) gp=gm 
-    IF (MAX(abp,abm) > 0.0) THEN 
-      dx=m/gp 
-    ELSE 
-      dx=EXP(CMPLX(LOG(1.0_sp+abx),iter,kind=spc)) 
-    END IF 
+    g2=g*g
+    h=g2-2.0_sp*f/b(1)
+    sq=SQRT((m-1)*(m*h-g2))
+    gp=g+sq
+    gm=g-sq
+    abp=ABS(gp)
+    abm=ABS(gm)
+    IF (abp < abm) gp=gm
+    IF (MAX(abp,abm) > 0.0) THEN
+      dx=m/gp
+    ELSE
+      dx=EXP(CMPLX(LOG(1.0_sp+abx),iter,kind=spc))
+    END IF
     x1=x-dx
     IF (x == x1) RETURN   !Converged.
-    IF (MOD(iter,MT) /= 0) THEN 
+    IF (MOD(iter,MT) /= 0) THEN
      x=x1
-    ELSE                     !Every so often we take a fractional step, 
-     x=x-dx*FRAC(iter/MT)    !to break any limit cycle (itself a rare 
+    ELSE                     !Every so often we take a fractional step,
+     x=x-dx*FRAC(iter/MT)    !to break any limit cycle (itself a rare
     END IF                   !occurrence)
   END DO 
 !Very unusual can occur only for complex roots.
@@ -1645,118 +1645,118 @@
   OPEN(unit=21, file=TRIM(Output_dir)//'LAGUER_error_'//file_ident, & 
        status='replace')
     write(unit=21,fmt=*)argh, 'SUBROUTINE LAGUER: too many iterations in root find procedure'
-  ENDFILE(unit=21) 
-  CLOSE(unit=21) 
+  ENDFILE(unit=21)
+  CLOSE(unit=21)
 ! 
 !--------------------------------------------------------------------
 CONTAINS
-!  
+!
   RECURSIVE FUNCTION poly_term_cc(a,b) RESULT(u)
-! **********************************************   
-  COMPLEX(SPC), DIMENSION(:), INTENT(IN) :: a 
-  COMPLEX(SPC), INTENT(IN) :: b 
-  COMPLEX(SPC), DIMENSION(size(a)) :: u 
-  INTEGER(I4B) :: n,j 
-   n=size(a) 
-   IF (n <= 0) RETURN 
-   u(1)=a(1) 
-   IF (n < 8) THEN 
-     DO j=2,n 
-       u(j)=a(j)+b*u(j-1) 
-     END DO 
-   ELSE 
-     u(2:n:2)=poly_term_cc(a(2:n:2)+a(1:n-1:2)*b,b*b) 
-     u(3:n:2)=a(3:n:2)+b*u(2:n-1:2) 
-   END IF 
+! **********************************************
+  COMPLEX(SPC), DIMENSION(:), INTENT(IN) :: a
+  COMPLEX(SPC), INTENT(IN) :: b
+  COMPLEX(SPC), DIMENSION(size(a)) :: u
+  INTEGER(I4B) :: n,j
+   n=size(a)
+   IF (n <= 0) RETURN
+   u(1)=a(1)
+   IF (n < 8) THEN
+     DO j=2,n
+       u(j)=a(j)+b*u(j-1)
+     END DO
+   ELSE
+     u(2:n:2)=poly_term_cc(a(2:n:2)+a(1:n-1:2)*b,b*b)
+     u(3:n:2)=a(3:n:2)+b*u(2:n-1:2)
+   END IF
   END FUNCTION poly_term_cc
 !--------------------------------------------------------------------
   FUNCTION poly_cc(x,coeffs)
-! ************************** 
-  COMPLEX(SPC), INTENT(IN) :: x 
-  COMPLEX(SPC), DIMENSION(:), INTENT(IN) :: coeffs 
-  COMPLEX(SPC) :: poly_cc 
-  COMPLEX(SPC) :: pow 
-  COMPLEX(SPC), DIMENSION(:), ALLOCATABLE :: vec 
-  INTEGER(I4B) :: i,n,nn 
-   n=size(coeffs) 
-   IF(n <= 0)THEN 
-     poly_cc=0.0_sp 
-   ELSE IF(n < 8)THEN 
-     poly_cc=coeffs(n) 
-     DO i=n-1,1,-1 
-       poly_cc=x*poly_cc+coeffs(i) 
-     END DO 
-   ELSE 
-     ALLOCATE(vec(n+1)) 
-     pow=x 
-     vec(1:n)=coeffs 
-     DO 
-       vec(n+1)=0.0_sp 
-       nn=ishft(n+1,-1) 
-       vec(1:nn)=vec(1:n:2)+pow*vec(2:n+1:2) 
-       IF(nn == 1)EXIT 
-       pow=pow*pow 
-       n=nn 
-     END DO 
-     poly_cc=vec(1) 
-     DEALLOCATE(vec) 
-   END IF 
+! **************************
+  COMPLEX(SPC), INTENT(IN) :: x
+  COMPLEX(SPC), DIMENSION(:), INTENT(IN) :: coeffs
+  COMPLEX(SPC) :: poly_cc
+  COMPLEX(SPC) :: pow
+  COMPLEX(SPC), DIMENSION(:), ALLOCATABLE :: vec
+  INTEGER(I4B) :: i,n,nn
+   n=size(coeffs)
+   IF(n <= 0)THEN
+     poly_cc=0.0_sp
+   ELSE IF(n < 8)THEN
+     poly_cc=coeffs(n)
+     DO i=n-1,1,-1
+       poly_cc=x*poly_cc+coeffs(i)
+     END DO
+   ELSE
+     ALLOCATE(vec(n+1))
+     pow=x
+     vec(1:n)=coeffs
+     DO
+       vec(n+1)=0.0_sp
+       nn=ishft(n+1,-1)
+       vec(1:nn)=vec(1:n:2)+pow*vec(2:n+1:2)
+       IF(nn == 1)EXIT
+       pow=pow*pow
+       n=nn
+     END DO
+     poly_cc=vec(1)
+     DEALLOCATE(vec)
+   END IF
   END FUNCTION poly_cc
 !--------------------------------------------------------------------
   FUNCTION poly_rr(x,coeffs)
-! **************************  
-  !Polynomial evaluation. 
-  REAL(SP), INTENT(IN) :: x 
-  REAL(SP), DIMENSION(:), INTENT(IN) :: coeffs 
-  REAL(SP) :: poly_rr 
-  REAL(SP) :: pow 
-  REAL(SP), DIMENSION(:), ALLOCATABLE :: vec 
-  INTEGER(I4B) :: i,n,nn 
-   n=size(coeffs) 
-   IF(n <= 0)THEN 
-     poly_rr=0.0_sp 
-   ELSE IF(n < 8)THEN 
-     poly_rr=coeffs(n) 
-     DO i=n-1,1,-1 
-       poly_rr=x*poly_rr+coeffs(i) 
-     END DO 
-   ELSE 
-     ALLOCATE(vec(n+1)) 
-     pow=x 
-     vec(1:n)=coeffs 
-     DO 
-       vec(n+1)=0.0_sp 
-       nn=ishft(n+1,-1) 
-       vec(1:nn)=vec(1:n:2)+pow*vec(2:n+1:2) 
-       IF(nn == 1)EXIT 
-       pow=pow*pow 
-       n=nn 
-     END DO 
-     poly_rr=vec(1) 
-     DEALLOCATE(vec) 
-   END IF 
+! **************************
+  !Polynomial evaluation.
+  REAL(SP), INTENT(IN) :: x
+  REAL(SP), DIMENSION(:), INTENT(IN) :: coeffs
+  REAL(SP) :: poly_rr
+  REAL(SP) :: pow
+  REAL(SP), DIMENSION(:), ALLOCATABLE :: vec
+  INTEGER(I4B) :: i,n,nn
+   n=size(coeffs)
+   IF(n <= 0)THEN
+     poly_rr=0.0_sp
+   ELSE IF(n < 8)THEN
+     poly_rr=coeffs(n)
+     DO i=n-1,1,-1
+       poly_rr=x*poly_rr+coeffs(i)
+     END DO
+   ELSE
+     ALLOCATE(vec(n+1))
+     pow=x
+     vec(1:n)=coeffs
+     DO
+       vec(n+1)=0.0_sp
+       nn=ishft(n+1,-1)
+       vec(1:nn)=vec(1:n:2)+pow*vec(2:n+1:2)
+       IF(nn == 1)EXIT
+       pow=pow*pow
+       n=nn
+     END DO
+     poly_rr=vec(1)
+     DEALLOCATE(vec)
+   END IF
   END FUNCTION poly_rr
 !--------------------------------------------------------------------
  END SUBROUTINE laguer
 
   SUBROUTINE Flux
-! ***************                                               
+! ***************
   USE Global, ONLY: L, c, pi
   USE Shock, ONLY: Radial_Height, b, RR, xR, R, x, Rrange, & 
                    xrange, rip_pck_num, SX, SY, SY_temp, RHSX
   USE Beam, ONLY: VR, vend, vcnt, vendold, vcntold, vmax,  & 
                   vcarray, vparray, f
-  USE Spectra, ONLY: DS1F, DS2F, DS3F, DS1H, DS2H, DS3H, freq_bins,     & 
-                     time_window, time_bins, exp_min, exp_range, l_val, & 
-                     spec_shift, fber, loglem, blocked1, blocked2,      & 
+  USE Spectra, ONLY: DS1F, DS2F, DS3F, DS1H, DS2H, DS3H, freq_bins,     &
+                     time_window, time_bins, exp_min, exp_range, l_val, &
+                     spec_shift, fber, loglem, blocked1, blocked2,      &
                      blocked3, Xo1, Xo2, Xo3, Yo1, Yo2, Yo3
   USE Wind, ONLY: Vd, stheta1on, stheta, ctheta, Ne
-  USE output, ONLY: total_F1, total_H1, total_F2, total_H2, total_F3, & 
+  USE output, ONLY: total_F1, total_H1, total_F2, total_H2, total_F3, &
                     total_H3
   IMPLICIT NONE 
 ! 
   REAL(KIND=L), ALLOCATABLE, DIMENSION(:) :: Yr, Zrsq
-  REAL(KIND=L), ALLOCATABLE, DIMENSION(:) :: distsq1, distsq2, distsq3 
+  REAL(KIND=L), ALLOCATABLE, DIMENSION(:) :: distsq1, distsq2, distsq3
   INTEGER, ALLOCATABLE, DIMENSION(:) :: k1, k2, k3
   REAL(KIND=L) :: jH, jF 
   REAL(KIND=L) :: GRx, Rstep, xstep, Scale_2_3D, Areaofcalc
@@ -1766,7 +1766,7 @@ CONTAINS
   INTEGER :: Z, Q, i, j, rn, rpn, Alloc_error, Dealloc_error
 ! 
   rpn=rip_pck_num/2   ;   IF(rpn < 1)rpn=1
-  Rstep=Rrange/(RR*RR) 
+  Rstep=Rrange/(RR*RR)
   xstep=xrange/(xR*xR)
   Scale_2_3D=1.2_L/b  !(0.3+0.3)/b=3Dising, 2.0=approx opposite theta 
                       !should incorporate explicit summation over slices 
@@ -1802,18 +1802,18 @@ CONTAINS
   distsq2=(Xo2-RHSX)**2 + (Yo2-Yr)**2 + Zrsq
   distsq3=(Xo3-RHSX)**2 + (Yo3-Yr)**2 + Zrsq
 ! convert distance from observer into a time bin number:
-  k1=1+(SQRT(distsq1)/c)/((1.0_L*time_window)/time_bins) 
-  k2=1+(SQRT(distsq2)/c)/((1.0_L*time_window)/time_bins) 
-  k3=1+(SQRT(distsq3)/c)/((1.0_L*time_window)/time_bins) 
+  k1=1+(SQRT(distsq1)/c)/((1.0_L*time_window)/time_bins)
+  k2=1+(SQRT(distsq2)/c)/((1.0_L*time_window)/time_bins)
+  k3=1+(SQRT(distsq3)/c)/((1.0_L*time_window)/time_bins)
 ! time bin based on straight line
-! Above assumes ripple is far enough away that geometry of source 
-! region is unimportant & thus total volume emissivity divided by 
+! Above assumes ripple is far enough away that geometry of source
+! region is unimportant & thus total volume emissivity divided by
 ! (one) distance squared will give good approx to flux...
 !
   vend=VR
   vcnt=1
 !
-! Do for array of points over a 2D shock/foreshock region:  
+! Do for array of points over a 2D shock/foreshock region:
 !
   DO Z=1,RR
     R=Z*Z*Rstep
@@ -1829,9 +1829,9 @@ CONTAINS
      vcntold=MAX(1,vcnt-3) ; vendold=vend
 !
 !    Initialise cutoff velocity counter to 1 for first calculation
-!    in each column.   
+!    in each column.
 !
-     IF(Q == xR)vcnt=1 
+     IF(Q == xR)vcnt=1
 !  
 !    Cut out of calculations regions where velocity is to high 
 !    or to low such that it will cause problems in the qlf subroutine.
@@ -1877,14 +1877,14 @@ CONTAINS
 !
       IF(blocked1 == 0)THEN
        DO rn=1,rpn
-        DS1H(j,k1(rn):k1(rn)+spec_shift)=DS1H(j,k1(rn):k1(rn)+spec_shift) & 
+        DS1H(j,k1(rn):k1(rn)+spec_shift)=DS1H(j,k1(rn):k1(rn)+spec_shift) &
                                          +2*jH/distsq1(rn)
        END DO
        total_H1=total_H1+2*jH/distsq1(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS1H(j,k1(rn):k1(rn)+spec_shift)=DS1H(j,k1(rn):k1(rn)+spec_shift) & 
+         DS1H(j,k1(rn):k1(rn)+spec_shift)=DS1H(j,k1(rn):k1(rn)+spec_shift) &
                                           +2*jH/distsq1(rn)
         END DO
         total_H1=total_H1+2*jH/distsq1(1)
@@ -1893,14 +1893,14 @@ CONTAINS
 !
       IF(blocked2 == 0)THEN
        DO rn=1,rpn
-        DS2H(j,k2(rn):k2(rn)+spec_shift)=DS2H(j,k2(rn):k2(rn)+spec_shift) & 
+        DS2H(j,k2(rn):k2(rn)+spec_shift)=DS2H(j,k2(rn):k2(rn)+spec_shift) &
                                          +2*jH/distsq2(rn)
        END DO
        total_H2=total_H2+2*jH/distsq2(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS2H(j,k2(rn):k2(rn)+spec_shift)=DS2H(j,k2(rn):k2(rn)+spec_shift) & 
+         DS2H(j,k2(rn):k2(rn)+spec_shift)=DS2H(j,k2(rn):k2(rn)+spec_shift) &
                                           +2*jH/distsq2(rn)
         END DO
         total_H2=total_H2+2*jH/distsq2(1)
@@ -1909,14 +1909,14 @@ CONTAINS
 !
       IF(blocked3 == 0)THEN
        DO rn=1,rpn
-         DS3H(j,k3(rn):k3(rn)+spec_shift)=DS3H(j,k3(rn):k3(rn)+spec_shift) & 
+         DS3H(j,k3(rn):k3(rn)+spec_shift)=DS3H(j,k3(rn):k3(rn)+spec_shift) &
                                           +2*jH/distsq3(rn)
        END DO
        total_H3=total_H3+2*jH/distsq3(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS3H(j,k3(rn):k3(rn)+spec_shift)=DS3H(j,k3(rn):k3(rn)+spec_shift) & 
+         DS3H(j,k3(rn):k3(rn)+spec_shift)=DS3H(j,k3(rn):k3(rn)+spec_shift) &
                                           +2*jH/distsq3(rn)
         END DO
         total_H3=total_H3+2*jH/distsq3(1)
@@ -1932,14 +1932,14 @@ CONTAINS
 !
       IF(blocked1 == 0)THEN
        DO rn=1,rpn
-        DS1F(j,k1(rn):k1(rn)+spec_shift)=DS1F(j,k1(rn):k1(rn)+spec_shift) & 
+        DS1F(j,k1(rn):k1(rn)+spec_shift)=DS1F(j,k1(rn):k1(rn)+spec_shift) &
                                          +2*jF/distsq1(rn)
        END DO
        total_F1=total_F1+2*jF/distsq1(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS1F(j,k1(rn):k1(rn)+spec_shift)=DS1F(j,k1(rn):k1(rn)+spec_shift) & 
+         DS1F(j,k1(rn):k1(rn)+spec_shift)=DS1F(j,k1(rn):k1(rn)+spec_shift) &
                                           +2*jF/distsq1(rn)
         END DO
         total_F1=total_F1+2*jF/distsq1(1)
@@ -1948,14 +1948,14 @@ CONTAINS
 !
       IF(blocked2 == 0)THEN
        DO rn=1,rpn
-        DS2F(j,k2(rn):k2(rn)+spec_shift)=DS2F(j,k2(rn):k2(rn)+spec_shift) & 
+        DS2F(j,k2(rn):k2(rn)+spec_shift)=DS2F(j,k2(rn):k2(rn)+spec_shift) &
                                          +2*jF/distsq2(rn)
        END DO
        total_F2=total_F2+2*jF/distsq2(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS2F(j,k2(rn):k2(rn)+spec_shift)=DS2F(j,k2(rn):k2(rn)+spec_shift) & 
+         DS2F(j,k2(rn):k2(rn)+spec_shift)=DS2F(j,k2(rn):k2(rn)+spec_shift) &
                                           +2*jF/distsq2(rn)
         END DO
         total_F2=total_F2+2*jF/distsq2(1)
@@ -1964,19 +1964,19 @@ CONTAINS
 !
       IF(blocked3 == 0)THEN
        DO rn=1,rpn
-        DS3F(j,k3(rn):k3(rn)+spec_shift)=DS3F(j,k3(rn):k3(rn)+spec_shift) & 
+        DS3F(j,k3(rn):k3(rn)+spec_shift)=DS3F(j,k3(rn):k3(rn)+spec_shift) &
                                          +2*jF/distsq3(rn)
        END DO
        total_F3=total_F3+2*jF/distsq3(1)
       ELSE 
        IF(j > i)THEN 
         DO rn=1,rpn
-         DS3F(j,k3(rn):k3(rn)+spec_shift)=DS3F(j,k3(rn):k3(rn)+spec_shift) & 
+         DS3F(j,k3(rn):k3(rn)+spec_shift)=DS3F(j,k3(rn):k3(rn)+spec_shift) &
                                           +2*jF/distsq3(rn)
         END DO
         total_F3=total_F3+2*jF/distsq3(1)
        END IF
-      END IF         
+      END IF
      END IF
 !
     END DO
@@ -1995,7 +1995,7 @@ CONTAINS
 !____________________________________________________________________
 
   SUBROUTINE cutoff_velocity_distribution
-! ***************************************                      
+! ***************************************
   USE Global, ONLY: c, csq
   USE Beam
   USE Wind, ONLY: stheta, stheta2, ctheta, Vesq, kappa
@@ -2005,9 +2005,9 @@ CONTAINS
 !
 ! Rs= R coordinate on shock from which electron with particular velocity
 ! would have come; xs=x as for R; Vpi=initial parallel velocity;
-! vperlcsq= square of perp velocity below which electrons cannot escape 
+! vperlcsq= square of perp velocity below which electrons cannot escape
 ! from shock based on losscone; vpersdsq= as above but based on shock
-! drift acceleration constraints; vpersq= dominant one of previous two;  
+! drift acceleration constraints; vpersq= dominant one of previous two;
 !
   REAL(KIND=L) :: Rs, xs, Vpi, vperlcsq, vpersdsq, vpersq, A, &
                   Vpisq, shockx, temp4vcarr, vcmax, Atemp4Rvponvdx
@@ -2086,9 +2086,9 @@ CONTAINS
       END IF
     END IF
 !   
-!   Stop calculating when number of reflected electrons drops 
+!   Stop calculating when number of reflected electrons drops
 !   below 1% of the peak height of the reflected distribution
-!   (valid when only one beam is present, ie smooth reflection 
+!   (valid when only one beam is present, ie smooth reflection
 !   and acceleration at shock):
 !     
     IF(vcarray(i) > vcmax)THEN
@@ -2107,7 +2107,7 @@ CONTAINS
 ! ***************
 !
 ! Estimates beam parameters.
-!                                               
+!
   USE Global, ONLY: L
   USE Beam, ONLY: deltavb, vb, Nb, vcnt, VR, f, dv, halfdv, vcarray
   USE Wind, ONLY: Ne
@@ -2124,34 +2124,34 @@ CONTAINS
 !
 ! Calculate flattened beam distribution:
 !  
-  p2=MAX(vcnt-3,0)  
+  p2=MAX(vcnt-3,0)
 !
   DO 
     p2=p2+1
     IF(p2 >= VR-3)EXIT
     dfdv=f(p2+1)-f(p2)
     IF(dfdv > 0.0)THEN
-      w=1 ; p1=p2 ; p3=p2+1 ; p2=p2+2 
+      w=1 ; p1=p2 ; p3=p2+1 ; p2=p2+2
       area=f(p3) 
-      d1=area-f(p1) ; d2=f(p2)-area 
+      d1=area-f(p1) ; d2=f(p2)-area
       DO 
         IF((d1 > d2).AND.(d1 > 0.0))THEN 
           w=w+1 ; area=area+f(p1) ; p1=p1-1
-      IF(p1 < 1) EXIT
+          IF(p1 < 1) EXIT
           d1=area-f(p1)*w ; d2=f(p2)*w-area
         ELSE IF(d2 > 0.0)THEN
-          w=w+1 ; area=area+f(p2) ; p2=p2+1 
-      IF(p2 > VR) EXIT
+          w=w+1 ; area=area+f(p2) ; p2=p2+1
+          IF(p2 > VR) EXIT
           d1=area-f(p1)*w ; d2=f(p2)*w-area
         ELSE 
-          EXIT 
-        END IF 
+          EXIT
+        END IF
       END DO
       vb=halfdv*(p2+p1)
       deltavb=halfdv*(p2-p1-2)
       Nb=Ne*dv*SUM(vcarray(p1+1:p2-1))
-      EXIT                             
-    END IF                            
+      EXIT
+    END IF
   END DO
 !
   END SUBROUTINE qlf
@@ -2193,8 +2193,8 @@ CONTAINS
     phiH=temp4phiH*zetaH*vbsq*vb
     temp4j=me*Nb*vbsq/(3.0_L*lr)
     jF1=(phiF/delohmF)*temp4j
-    jH1=(phiH/delohmH)*temp4j  
-    IF(vb < 0.7_L*Ve)jF1=0.0_L 
+    jH1=(phiH/delohmH)*temp4j
+    IF(vb < 0.7_L*Ve)jF1=0.0_L
 !
 ! If emission is produced calculate its frequency using a 
 ! Gaussian random fluctuation in Ne: 
@@ -2214,7 +2214,7 @@ CONTAINS
 !____________________________________________________________________
 
   SUBROUTINE Finalise_and_Write
-! *****************************       
+! *****************************
   USE Global, ONLY: L
   USE Spectra, ONLY: DS1F, DS2F, DS3F, DS1H, DS2H, DS3H, & 
                      exp_min, freq_bins, spec_shift, erfb
@@ -2233,40 +2233,40 @@ CONTAINS
 !
     DO j=1,spec_shift 
       IF(DS1F(i,j) > 1.e-38_L)THEN 
-        DS1F(i,j)=LOG10(DS1F(i,j)/divby) 
-      ELSE 
-        DS1F(i,j)=0.0_L 
-      END IF   
+        DS1F(i,j)=LOG10(DS1F(i,j)/divby)
+      ELSE
+        DS1F(i,j)=0.0_L
+      END IF
       IF(DS1H(i,j) > 1.e-38_L)THEN 
-        DS1H(i,j)=LOG10(DS1H(i,j)/divby) 
-      ELSE 
-        DS1H(i,j)=0.0_L 
-      END IF  
-    END DO 
+        DS1H(i,j)=LOG10(DS1H(i,j)/divby)
+      ELSE
+        DS1H(i,j)=0.0_L
+      END IF
+    END DO
     DO j=1,spec_shift 
       IF(DS2F(i,j) > 1.e-38_L)THEN 
-        DS2F(i,j)=LOG10(DS2F(i,j)/divby) 
-      ELSE 
-        DS2F(i,j)=0.0_L 
-      END IF  
+        DS2F(i,j)=LOG10(DS2F(i,j)/divby)
+      ELSE
+        DS2F(i,j)=0.0_L
+      END IF
       IF(DS2H(i,j) > 1.e-38_L)THEN 
-        DS2H(i,j)=LOG10(DS2H(i,j)/divby) 
-      ELSE 
-        DS2H(i,j)=0.0_L 
-      END IF  
-    END DO 
+        DS2H(i,j)=LOG10(DS2H(i,j)/divby)
+      ELSE
+        DS2H(i,j)=0.0_L
+      END IF
+    END DO
     DO j=1,spec_shift 
       IF(DS3F(i,j) > 1.e-38_L)THEN 
-        DS3F(i,j)=LOG10(DS3F(i,j)/divby) 
-      ELSE 
-        DS3F(i,j)=0.0_L 
-      END IF  
+        DS3F(i,j)=LOG10(DS3F(i,j)/divby)
+      ELSE
+        DS3F(i,j)=0.0_L
+      END IF
       IF(DS3H(i,j) > 1.e-38_L)THEN 
-        DS3H(i,j)=LOG10(DS3H(i,j)/divby) 
-      ELSE 
-        DS3H(i,j)=0.0_L 
-      END IF  
-    END DO 
+        DS3H(i,j)=LOG10(DS3H(i,j)/divby)
+      ELSE
+        DS3H(i,j)=0.0_L
+      END IF
+    END DO
 !     
   END DO
 !
@@ -2276,7 +2276,7 @@ CONTAINS
 !
   DS1F=EOSHIFT(DS1F,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
   DS2F=EOSHIFT(DS2F,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
-  DS3F=EOSHIFT(DS3F,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2) 
+  DS3F=EOSHIFT(DS3F,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
   DS1H=EOSHIFT(DS1H,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
   DS2H=EOSHIFT(DS2H,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
   DS3H=EOSHIFT(DS3H,SHIFT=spec_shift,BOUNDARY=0.0_L,DIM=2)
@@ -2287,7 +2287,7 @@ CONTAINS
   SUBROUTINE Write_to_file
 ! ************************
   USE OutPut
-  USE Wind, ONLY: Average_kappa, Vsw, nos, SWS, Ne_1AU, Ne_1Rs, Te_1AU, & 
+  USE Wind, ONLY: Average_kappa, Vsw, nos, SWS, Ne_1AU, Ne_1Rs, Te_1AU, &
                   Ti_1AU, Bo, Vsw_1AU
   USE Shock, ONLY: Radial_Height, UT_time, UCME, CME_accel, & 
                    expansion, scale, scale_exp
@@ -2295,27 +2295,27 @@ CONTAINS
                      exp_min, exp_range, l_val, spec_shift, & 
                      Xo1, Xo2, Xo3, Yo1, Yo2, Yo3
   IMPLICIT NONE 
-! 
+!
   CHARACTER(LEN=7) :: output_status
-  CHARACTER(LEN=77) :: full_path_0a, full_path_0b, full_path_0c, & 
-                       full_path_0d, full_path_0e, full_path_0f, & 
-                       full_path_1, full_path_1b, full_path_2,   & 
+  CHARACTER(LEN=77) :: full_path_0a, full_path_0b, full_path_0c, &
+                       full_path_0d, full_path_0e, full_path_0f, &
+                       full_path_1, full_path_1b, full_path_2,   &
                        full_path_3, full_path_4, full_path_5,    &
                        full_path_6, full_path_8, full_path_9,    &
                        full_path_10, full_path_11
   INTEGER :: j
-!    
+!
   330 FORMAT('********************************',/,                      &
              '*** INITIAL PARAMETER VALUES ***',/,                      &
              '********************************',//,                     &
              'Radial_Height=',EN14.5,' m ',//,                          &
              'CME Speed=',EN13.4,' m/s',//,                             &
              'CME deceleration=',F4.1,' m/s/s ',//,                     &
-             'CME expansion=',F4.1,                                     & 
-                            ' (0=no expansion;1=expanding at UCME)',//, &  
-             'CME scale=',F4.1,' (1.0=1AU; Bigger=smaller)',//,         &  
-             'CME scale rate of change=',F4.2,                          & 
-               ' (for scale=1~>0.30; scale=3~>0.37)',//,                & 
+             'CME expansion=',F4.1,                                     &
+                            ' (0=no expansion;1=expanding at UCME)',//, &
+             'CME scale=',F4.1,' (1.0=1AU; Bigger=smaller)',//,         &
+             'CME scale rate of change=',F4.2,                          &
+               ' (for scale=1~>0.30; scale=3~>0.37)',//,                &
              'kappa=',F4.1,//,                                          &
              '1AU normalizations:',/,                                   &
              'Ne=',EN11.3,' m^-3',/,                                    &
@@ -2337,11 +2337,11 @@ CONTAINS
              'X=',ES11.2,' m',/,                                        &
              'Y=',ES12.2,' m',/// )   
 ! 
-  370 FORMAT('*********************************',/,   & 
-             '*** EXPLICIT STRUCTURE VALUES ***',/,   & 
-             '*********************************',//,  & 
-             'There are ',I2,' explicitly defined',/, & 
-             'structures in this calculation.',/,     & 
+  370 FORMAT('*********************************',/,   &
+             '*** EXPLICIT STRUCTURE VALUES ***',/,   &
+             '*********************************',//,  &
+             'There are ',I2,' explicitly defined',/, &
+             'structures in this calculation.',/,     &
              'They are:',// )
   371 FORMAT('Structure ',I2,' is of type ', I2,': a CIR',/,        & 
              'Rotation=',F4.2,' ; ','Width=',F4.2,// ) 
@@ -2351,14 +2351,14 @@ CONTAINS
              'R_inner=',ES12.3,' m',/,           &
              'R_outer=',ES12.3,' m',/,           &
              'respectively.',// )  
-  374 FORMAT('Structure ',I2,' is of type ', I2,  & 
-             ': a square/rectangular',/,          &  
+  374 FORMAT('Structure ',I2,' is of type ', I2,  &
+             ': a square/rectangular',/,          &
              'region bound by',/,                 &
-             'X_min=',ES12.3,' m',' ; ','X_max=', & 
+             'X_min=',ES12.3,' m',' ; ','X_max=', &
              ES12.3,' m',/,                       &
-             'Y_min=',ES12.3,' m',' ; ','Y_max=', & 
+             'Y_min=',ES12.3,' m',' ; ','Y_max=', &
              ES12.3,' m',// )  
-  373 FORMAT('Structure ',I2,' is of type ', I2,            & 
+  373 FORMAT('Structure ',I2,' is of type ', I2,            &
              ': a circular region of radius',/,             &
              'R=',ES12.3,' m',/,                            &
              'and centered on heliocentric coordinates',/,  &
@@ -2408,40 +2408,40 @@ CONTAINS
     END IF
 !
     OPEN(unit=14,file=full_path_1,status=output_status)
-      write(unit=14,fmt=330)Radial_Height, UCME, CME_accel, expansion, & 
-                            scale, scale_exp, Average_kappa, Ne_1AU,   & 
-                            Ne_1Rs, Te_1AU, Ti_1AU, Bo, Vsw_1AU,       & 
-                            exp_min, exp_range, l_val,                 & 
+      write(unit=14,fmt=330)Radial_Height, UCME, CME_accel, expansion, &
+                            scale, scale_exp, Average_kappa, Ne_1AU,   &
+                            Ne_1Rs, Te_1AU, Ti_1AU, Bo, Vsw_1AU,       &
+                            exp_min, exp_range, l_val,                 &
                             Xo1, Yo1, Xo2, Yo2, Xo3, Yo3
       write(unit=14,fmt=370)nos 
       DO j=1,nos
         SELECT CASE (SWS(j)%shape)
           CASE (1)
-            write(unit=14,fmt=371)j,SWS(j)%shape,SWS(j)%param(1), & 
+            write(unit=14,fmt=371)j,SWS(j)%shape,SWS(j)%param(1), &
                                   SWS(j)%param(2)
           CASE (2)
-            write(unit=14,fmt=372)j,SWS(j)%shape,SWS(j)%param(1), & 
+            write(unit=14,fmt=372)j,SWS(j)%shape,SWS(j)%param(1), &
                                   SWS(j)%param(2)
           CASE (4)
-            write(unit=14,fmt=374)j,SWS(j)%shape,SWS(j)%param(1),  & 
-                                  SWS(j)%param(2),SWS(j)%param(3), & 
+            write(unit=14,fmt=374)j,SWS(j)%shape,SWS(j)%param(1),  &
+                                  SWS(j)%param(2),SWS(j)%param(3), &
                                   SWS(j)%param(4)
           CASE (3)
-            write(unit=14,fmt=373)j,SWS(j)%shape,SWS(j)%param(1), & 
+            write(unit=14,fmt=373)j,SWS(j)%shape,SWS(j)%param(1), &
                                   SWS(j)%param(2),SWS(j)%param(3)
           CASE (6)
-            write(unit=14,fmt=376)j,SWS(j)%shape,SWS(j)%param(1),  & 
-                                  SWS(j)%param(2),SWS(j)%param(3), & 
-                                  SWS(j)%param(3),SWS(j)%param(4), & 
+            write(unit=14,fmt=376)j,SWS(j)%shape,SWS(j)%param(1),  &
+                                  SWS(j)%param(2),SWS(j)%param(3), &
+                                  SWS(j)%param(3),SWS(j)%param(4), &
                                   SWS(j)%param(5),SWS(j)%param(6)
         END SELECT
       END DO 
     ENDFILE(unit=14) 
     CLOSE(unit=14)
 !   
-    OPEN(unit=13,file=full_path_0a,status=output_status) 
-    OPEN(unit=15,file=full_path_0b,status=output_status) 
-    OPEN(unit=16,file=full_path_0c,status=output_status)  
+    OPEN(unit=13,file=full_path_0a,status=output_status)
+    OPEN(unit=15,file=full_path_0b,status=output_status)
+    OPEN(unit=16,file=full_path_0c,status=output_status)
     ENDFILE(unit=13) 
     CLOSE(unit=13)
     ENDFILE(unit=15) 
@@ -2449,9 +2449,9 @@ CONTAINS
     ENDFILE(unit=16) 
     CLOSE(unit=16)
 !   
-    OPEN(unit=43,file=full_path_0d,status=output_status) 
-    OPEN(unit=45,file=full_path_0e,status=output_status) 
-    OPEN(unit=46,file=full_path_0f,status=output_status)  
+    OPEN(unit=43,file=full_path_0d,status=output_status)
+    OPEN(unit=45,file=full_path_0e,status=output_status)
+    OPEN(unit=46,file=full_path_0f,status=output_status)
     ENDFILE(unit=43) 
     CLOSE(unit=43)
     ENDFILE(unit=45) 
@@ -2519,17 +2519,17 @@ CONTAINS
     write(unit=14,fmt=300)UT_time,Vsw
   ENDFILE(unit=13) 
   CLOSE(unit=13)
-  ENDFILE(unit=15) 
+  ENDFILE(unit=15)
   CLOSE(unit=15)
-  ENDFILE(unit=16) 
+  ENDFILE(unit=16)
   CLOSE(unit=16)
-  ENDFILE(unit=43) 
+  ENDFILE(unit=43)
   CLOSE(unit=43)
-  ENDFILE(unit=45) 
+  ENDFILE(unit=45)
   CLOSE(unit=45)
-  ENDFILE(unit=46) 
+  ENDFILE(unit=46)
   CLOSE(unit=46)
-  ENDFILE(unit=14) 
+  ENDFILE(unit=14)
   CLOSE(unit=14)
 !
   OPEN(unit=13,file=full_path_1b,status='old',position='append')
@@ -2581,7 +2581,7 @@ CONTAINS
   ENDFILE(unit=13) 
   CLOSE(unit=13)
 !  
-  END SUBROUTINE Write_to_file          
+  END SUBROUTINE Write_to_file
 !____________________________________________________________________
 !
 !EOF Dynamic_Spectra.f90  (Thesis Version)
