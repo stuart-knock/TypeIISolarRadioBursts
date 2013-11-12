@@ -293,7 +293,7 @@
 !  
   REAL(KIND=L), DIMENSION(VR) :: vparray=0.0_L ! vel|| dist'bn
   REAL(KIND=L), DIMENSION(VR) :: vcarray=0.0_L ! cutoff vel dist'bn
-  REAL(KIND=L), DIMENSION(VR) :: f=0.0_L	     ! total vel dist'bn
+  REAL(KIND=L), DIMENSION(VR) :: f=0.0_L         ! total vel dist'bn
   REAL(KIND=L), DIMENSION(VR) :: vel=0.0_L     ! beam velocity
   REAL(KIND=L), DIMENSION(VR) :: temp4vponvd=0.0_L
 !  
@@ -303,7 +303,7 @@
 !  
 ! beam velocity, beam width  and number of electrons in beam:
   REAL(KIND=L) :: vb, deltavb, Nb
-  REAL(KIND=L) :: dv, halfdv    
+  REAL(KIND=L) :: dv, halfdv
 !
 ! Intermediate calculation variables:
 !
@@ -2011,7 +2011,7 @@ CONTAINS
 !
   REAL(KIND=L) :: Rs, xs, Vpi, vperlcsq, vpersdsq, vpersq, A, &
                   Vpisq, shockx, temp4vcarr, vcmax, Atemp4Rvponvdx
-!		   
+!   
   INTEGER :: cntr, S, i
 !
   vcarray(vcntold:vendold)=0.0_L
@@ -2137,11 +2137,11 @@ CONTAINS
       DO 
         IF((d1 > d2).AND.(d1 > 0.0))THEN 
           w=w+1 ; area=area+f(p1) ; p1=p1-1
-	  IF(p1 < 1) EXIT
+      IF(p1 < 1) EXIT
           d1=area-f(p1)*w ; d2=f(p2)*w-area
         ELSE IF(d2 > 0.0)THEN
           w=w+1 ; area=area+f(p2) ; p2=p2+1 
-	  IF(p2 > VR) EXIT
+      IF(p2 > VR) EXIT
           d1=area-f(p1)*w ; d2=f(p2)*w-area
         ELSE 
           EXIT 
@@ -2209,7 +2209,7 @@ CONTAINS
     IF(jH1 > 0.0)H_freq=2.0_L*fp 
 !    
   END IF
-!	
+!    
   END SUBROUTINE emissivities
 !____________________________________________________________________
 
@@ -2581,7 +2581,7 @@ CONTAINS
   ENDFILE(unit=13) 
   CLOSE(unit=13)
 !  
-  END SUBROUTINE Write_to_file  		
+  END SUBROUTINE Write_to_file          
 !____________________________________________________________________
 !
 !EOF Dynamic_Spectra.f90  (Thesis Version)
